@@ -62,7 +62,7 @@ def modulesConfig = [
 ]
 
 task jarPatch(dependsOn: installDist, group: 'build',
-              description: 'Patch dependencies with module information') {
+        description: 'Patch dependencies with module information') {
     inputs.dir bundlesDir
     outputs.dir patchLibsDir
 
@@ -94,10 +94,9 @@ task jarPatch(dependsOn: installDist, group: 'build',
 
             logger.info("Modularize ${moduleItemJar}")
 
-            logger.info("Compile module-info.class")
-
             def compiledModuleDir = new File(modulesDir, moduleItemName)
 
+            // compile module descriptor
             exec {
                 workingDir modulesDir
 
@@ -113,8 +112,7 @@ task jarPatch(dependsOn: installDist, group: 'build',
                 errorOutput = System.out
             }
 
-            logger.info("Update JAR")
-
+            // update JAR
             exec {
                 workingDir patchLibsDir
 
@@ -145,21 +143,15 @@ task bundle(dependsOn: jarPatch,
     doLast {
         delete bundleOutput
 
-        logger.info("Linking")
-
         def javaHome = System.getenv('JAVA_HOME')
-        if (javaHome == null
-                || javaHome.isEmpty()) {
+        if (javaHome == null || javaHome.isEmpty()) {
             throw new GradleException('JAVA_HOME is not set')
         }
 
         def targetOsJavaHome = project.hasProperty('targetOsJavaHome') ? project.property('targetOsJavaHome') : null
-        if (targetOsJavaHome == null
-                || targetOsJavaHome.isEmpty()) {
+        if (targetOsJavaHome == null || targetOsJavaHome.isEmpty()) {
             targetOsJavaHome = javaHome
         }
-
-        logger.info('Target JAVA_HOME ' + targetOsJavaHome)
 
         // Call jlink
         exec {
@@ -181,8 +173,6 @@ task bundle(dependsOn: jarPatch,
 
             logger.info commandLine.join(' ')
         }
-
-        logger.info("Fix permissions")
 
         // fix non-writable files in 'legal/'
         def osName = System.getProperty("os.name").toLowerCase();
