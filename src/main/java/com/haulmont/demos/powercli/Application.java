@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-module com.haulmont.demos.powercli {
-    requires com.google.common;
+package com.haulmont.demos.powercli;
+
+import com.google.common.io.CharStreams;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Application {
+    public static void main(String[] args) throws IOException {
+        var bannerStream = Application.class.getResourceAsStream("/com/haulmont/demos/powercli/banner.txt");
+        System.out.println(CharStreams.toString(new InputStreamReader(bannerStream)));
+    }
 }

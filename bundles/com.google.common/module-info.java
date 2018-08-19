@@ -2,7 +2,7 @@ module com.google.common {
     requires transitive java.logging;
     requires transitive java.xml;
 
-    requires transitive checker.compat.qual;
+    requires transitive checker.qual;
     requires transitive error.prone.annotations;
     requires transitive j2objc.annotations;
     requires transitive animal.sniffer.annotations;
@@ -24,5 +24,8 @@ module com.google.common {
     exports com.google.common.util.concurrent;
     exports com.google.common.xml;
 
-    uses com.google.common.base.PatternCompiler;
+    // BEWARE ! https://github.com/google/guava/issues/3147
+    // See https://github.com/google/guava/commit/8287cdfa317ea97a7a5e8e1a0f5a786ae09d2eac
+    // Fixed in 26.0-jre
+    // uses com.google.common.base.PatternCompiler;
 }
